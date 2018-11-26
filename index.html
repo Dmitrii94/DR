@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Квест</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
+</head>
+<body>
+<script>
+    hiddenImg1= new  Image();
+    hiddenImg2= new  Image();
+    hiddenImg3= new  Image();
+    hiddenImg4= new  Image();
+    hiddenImg5= new  Image();
+    hiddenImg6= new  Image();
+    hiddenImg7= new  Image();
+    hiddenImg8= new  Image();
+    hiddenImg9= new  Image();
+    hiddenImg10= new  Image();
+    hiddenImg11= new  Image();
+    hiddenImg12= new  Image();
+    hiddenImg13= new  Image();
+    hiddenImg14= new  Image();
+    hiddenImg15= new  Image();
+    hiddenImg16= new  Image();
+    hiddenImg1.src = 'img/her/negger.png';
+    hiddenImg2.src = 'img/her/cez.png';
+    hiddenImg3.src = 'img/her/dic.png';
+    hiddenImg4.src = 'img/her/dim.png';
+    hiddenImg5.src = 'img/her/krud.png';
+    hiddenImg6.src = 'img/her/logan.png';
+    hiddenImg7.src = 'img/her/lord.png';
+    hiddenImg8.src = 'img/her/luber.png';
+    hiddenImg9.src = 'img/her/negger.png';
+    hiddenImg10.src = 'img/her/will.png';
+    hiddenImg11.src = 'img/dima.png';
+    hiddenImg12.src = 'img/game.png';
+    hiddenImg13.src = 'img/m.png';
+    hiddenImg14.src = 'img/map.png';
+    hiddenImg15.src = 'img/paper.png';
+    hiddenImg16.src = 'img/ramka.png';
+</script>
+<div id="app">
+    <div class="map">
+        <transition name="init">
+            <div v-if="initBoolean" class="init" @click="initQest">
+                <span>Сыграем? :)</span>
+            </div>
+        </transition>
+        <transition name="inform">
+            <div v-if="informBoolean" class="inform" :style="{ backgroundImage: infoUrl }">
+                <p v-if="initInputBoolean">{{informText}}</p>
+                <input v-if="initInputBoolean" class="informInput">
+                <span @click="informClick">Lets Go!</span>
+            </div>
+        </transition>
+        <transition v-for="(point, i) in points" name="point">
+            <div v-if="point.visible" class="point" :style="{ top: point.posY, left: point.posX }" @click="pointClick(i)">
+                <!--<span>ddddd</span>-->
+            </div>
+        </transition>
+        <transition name="person">
+            <div v-if="personVisible" class="person" :style="{ backgroundImage: personUrl }">
+                <span @click="pointClick">{{personName}}</span>
+            </div>
+        </transition>
+        <transition name="personSpeech">
+            <div v-if="personSpeechVisible" class="personSpeech">
+                <span @click="personSpeechClick">{{personSpeechVisibleText}}</span>
+            </div>
+        </transition>
+
+        <!--<transition name="mailMove">-->
+            <!--<div v-if="mailVis" class="mail" v-bind:style="{ top: mailTop + 'px', left: mailLeft + 'px', width: mailWidth + 'px', height: mailHeight + 'px' }">-->
+                  <!---->
+            <!--</div>-->
+        <!--</transition>-->
+        <!--<transition name="paperMove">-->
+            <!--<div v-if="paperVis" class="paper" v-bind:style="{ top: paperTop + 'px', left: paperLeft + 'px', width: paperWidth + 'px', height: paperHeight}">-->
+    <!---->
+            <!--</div>-->
+        <!--</transition>-->
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                points: [
+                    {
+                        visible: false,
+                        posX: '75%',
+                        posY: '30%',
+                        password: 'T-1000',
+                    },
+                    {
+                        visible: false,
+                        posX: '72%',
+                        posY: '44%',
+                        password: 'ошибка',
+                    },
+                    {
+                        visible: false,
+                        posX: '65%',
+                        posY: '55%',
+                        password: 'Сандра',
+                    },
+                    {
+                        visible: false,
+                        posX: '57%',
+                        posY: '65%',
+                        password: 'Василий',
+                    },
+                    {
+                        visible: false,
+                        posX: '50%',
+                        posY: '70%',
+                        password: 'пленка',
+                    },
+                    {
+                        visible: false,
+                        posX: '45%',
+                        posY: '80%',
+                        password: '100',
+                    },
+                    {
+                        visible: false,
+                        posX: '38%',
+                        posY: '75%',
+                        password: 'вспоминаешь',
+                    },
+                    {
+                        visible: false,
+                        posX: '30%',
+                        posY: '78%',
+                        password: '1000001',
+                    },
+                    {
+                        visible: false,
+                        posX: '25%',
+                        posY: '50%',
+                        password: 'Леня',
+                    },
+                    {
+                        visible: false,
+                        posX: '15%',
+                        posY: '10%',
+                        password: '',
+                    },
+                ],
+                persons: [
+                    {
+                        url: 'url("img/her/negger.png")',
+                        text: 'Hi baby! Поздравляю - это твоё первое задание... Джон Коннор знает ответы! Разыщи Джона Конора! Go',
+                    },
+                    {
+                        url: 'url("img/her/krud.png")',
+                        text: '"Я есть круд! Я есть круд! Я есть круд!", "Я поражаюсь. Как в пекло лезть, так он спит. Как деньги делить - он сразу зашелестел."',
+                    },
+                    {
+                        url: 'url("img/her/brus.png")',
+                        text: 'Привет, Даш, я тут снимался недавно в одном фильме и не помню как зовут главную героиню. Не напомнишь?',
+                    },
+                    {
+                        url: 'url("img/her/logan.png")',
+                        text: 'Передай своей нервной системе, что с меня бутылка!',
+                    },
+                    {
+                        url: 'url("img/her/will.png")',
+                        text: 'Апчхи! У меня аллергия на чушь!!',
+                    },
+                    {
+                        url: 'url("img/her/dic.png")',
+                        text: 'Посмотрим, что осталось в твоей черепушке! Ахахаха!',
+                    },
+                    {
+                        url: 'url("img/her/lord.png")',
+                        text: 'Ёу детка!? станцуем?) У меня есть для тебя классная песенка!))',
+                    },
+                    {
+                        url: 'url("img/her/luber.png")',
+                        text: '"Даш, в таком виде идти опасно!","Да, насилуют на каждом углу!","Эмм.. Но не каждый вечер, Любер..."',
+                    },
+                    {
+                        url: 'url("img/her/cez.png")',
+                        text: 'Я - цезарь! Грозный обезьян! Такой весь мачо-шмачо-брутачо! и тебе я нравлюсь?! Ха, ну конечно, чего я спрашиваю...',
+                    },
+                    {
+                        url: 'url("img/her/dim.png")',
+                        text: 'Ну, поздравляю - та смогла пройти этот квест!) исход игры найдёшь в боксе!) Надень боксерские перчатки во дворе и отдубась грушу)',
+                    },
+                ],
+                informTexts: [
+                    {
+                        text: 'Что такое Джон Коннор? Глупый пацан! А вот терминаторы - это тема! Какая модель терминатора гонялась за ним во второй части фильма?(в формате "буква(en)-число")',
+                    },
+                    {
+                        text: 'Дюндик - хитрый пёс. Найдёшь ответ за его домом(слово)',
+                    },
+                    {
+                        text: 'Имя персонажа, которого играла главная героиня фильма "Неудержимые"(имя)',
+                    },
+                    {
+                        text: 'Хаха! Вот встретила ты Немзера на сведской вечеринке, кого бы он цитировал? Кто гений?(имя)',
+                    },
+                    {
+                        text: 'Мужчину находят убитым в его кабинете. В руке зажат револьвер, на столе лежит диктофон. Коп включает диктофон покойного и сразу! слышат записанное на пленку сообщение: "Я не могу больше жить. Жизнь больше не имеет для меня никакого смысла...". После этого - выстрел. Какой предмет стал причиной того, что копы сразу поняли, что мужчина был убит?(ИМ Падеж. Сущ.)',
+                    },
+                    {
+                        text: 'Ответ на свой вопрос ты найдёшь с старом горне...',
+                    },
+                    {
+                        text: 'Двадцать пятое слово в хите Лепса (слово)',
+                    },
+                    {
+                        text: 'В пределах двора разбросанно 3 бурильные коронки. Найдёшь ответ в одной из них)) Опасные бабушки будут тебя терзать вопросами о том, что ты делаешь - не сломайся!)) Ахаххаха)) (число)',
+                    },
+                    {
+                        text: 'Самый первый твой любимый обезьян ахахахха!)) (имя)',
+                    },
+                    {
+                        text: 'Ладно, ладно, не ругайся)))',
+                    },
+                ],
+                initBoolean: false,
+                initInputBoolean: false,
+                informBoolean: false,
+                pointVisible: false,
+                personVisible: false,
+                personSpeechVisible: false,
+                personSpeechVisibleText: 'none',
+                personUrl: 'none',
+                informText: 'Lets go!',
+                currentPoint: null,
+                infoUrl: 'none',
+            }
+        },
+        methods: {
+            mapUpdate: function() {
+                document.getElementsByClassName('map')[0].style.height = document.documentElement.clientWidth * 0.42 + "px";
+            },
+            initApp: function () {
+                this.initBoolean = true;
+                this.infoUrl = 'url("img/game.png")';
+            },
+            initQest: function () {
+                this.initBoolean = false;
+                this.informBoolean = true;
+            },
+            informClick: function () {
+                if (this.currentPoint == null){
+                    this.informBoolean = false;
+                    this.pointVisible = true;
+                    this.currentPoint = 0;
+                    this.points[this.currentPoint].visible = true;
+                    this.initInputBoolean = true;
+                } else{
+                    if (document.getElementsByClassName('informInput')[0].value == this.points[this.currentPoint].password) {
+                        this.informBoolean = false;
+                        this.pointVisible = true;
+                        if(this.currentPoint<this.points.length-1){
+                            this.currentPoint = this.currentPoint + 1;
+                            this.points[this.currentPoint].visible = true;
+                        }
+                    }else{
+                        document.getElementsByClassName('informInput')[0].value = "подумай ещё!!!";
+                    }
+                }
+            },
+            pointClick: function (pointIndex) {
+
+                this.infoUrl = 'url("img/ramka.png")';
+                this.currentPoint = pointIndex;
+                this.personSpeechVisibleText = this.persons[pointIndex].text;
+                this.personUrl = this.persons[pointIndex].url;
+                this.informBoolean = false;
+                this.personVisible = !this.personVisible;
+                this.personSpeechVisible = !this.personSpeechVisible;
+            },
+            personSpeechClick: function () {
+                if(this.currentPoint < this.persons.length-1){
+                    this.informText = this.informTexts[this.currentPoint].text;
+                    this.personSpeechVisible = false;
+                    this.personVisible = false;
+                    this.informBoolean = true;
+                }
+            }
+        },
+        mounted() {
+            this.mapUpdate();
+            window.addEventListener('resize', this.mapUpdate);
+            this.initApp();
+        },
+    });
+
+</script>
+<style>
+    @font-face {
+        font-family: MTCORSVA;
+        src: url(fonts/MTCORSVA.TTF);
+    }
+    *{
+        margin: 0;
+        padding: 0;
+    }
+    body{
+        background: url('img/paper.png');
+        background-position: center center;
+        background-size: cover;
+        background-repeat: repeat;
+        height: 100vh;
+        -webkit-transition: all 1s ease-out 0.5s;
+        -moz-transition: all 1s ease-out 0.5s;
+        -o-transition: all 1s ease-out 0.5s;
+        transition: all 1s ease-out 0.5s;
+        position: relative;
+        overflow: hidden;
+    }
+    #app{
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+    .map{
+        width: 90%;
+        background: black;
+        display: inline-block;
+        margin-top: 2%;
+        background: url('img/map.jpg');
+        background-position: center center;
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        -webkit-box-shadow: 4px 9px 40px -7px rgba(0,0,0,0.75);
+        -moz-box-shadow: 4px 9px 40px -7px rgba(0,0,0,0.75);
+        box-shadow: 4px 9px 40px -7px rgba(0,0,0,0.75);
+    }
+    .init{
+        width: 400px;
+        height: 440px;
+        border: 0px solid black;
+        position: absolute;
+        left: 34%;
+        background: url('img/dima.png');
+        background-position: center center;
+        background-size: 100% 100%;
+        font-family: MTCORSVA;
+        font-size: 35px;
+        cursor: pointer;
+        -webkit-filter: drop-shadow(5px 5px 5px #222);
+        filter:         drop-shadow(5px 5px 5px #222);
+        text-shadow: 1px 1px 2px black, 0 0 1em red;
+        color: yellow;
+    }
+    .init span{
+        position: absolute;
+        bottom: 0px;
+    }
+    .inform{
+        width: 400px;
+        height: 200px;
+        border: 0px solid black;
+        position: absolute;
+        left: 40%;
+        top:100px;
+        background-position: center center;
+        background-size: 100% 100%;
+        color: yellow;
+        font-family: MTCORSVA;
+        font-size: 35px;
+        -webkit-filter: drop-shadow(5px 5px 5px #222);
+        filter:         drop-shadow(5px 5px 5px #222);
+        padding: 60px;
+        z-index: 5;
+    }
+    .inform p{
+        font-size: 20px;
+    }
+    .inform span{
+        cursor: pointer;
+        text-shadow: 1px 1px 2px black, 0 0 1em red;
+    }
+    .point{
+        width: 50px;
+        height: 80px;
+        /*border: 1px solid black;*/
+        position: absolute;
+        left: 70%;
+        top: 20%;
+        opacity: 1;
+        background: url('img/m.png');
+        background-position: center center;
+        background-size: 100% 100%;
+        cursor: pointer;
+        -webkit-filter: drop-shadow(5px 5px 5px #222);
+        filter:         drop-shadow(5px 5px 5px #222);
+    }
+    .person{
+        width: 300px;
+        height: 500px;
+        /*border: 1px solid black;*/
+        position: absolute;
+        right: 3%;
+        background-position: center center;
+        background-size: 100% 100%;
+        top: 15%;
+        -webkit-filter: drop-shadow(5px 5px 5px #222);
+        filter:         drop-shadow(5px 5px 5px #222);
+    }
+    .personSpeech{
+        width: 200px;
+        height: 100px;
+        /*border: 1px solid black;*/
+        position: absolute;
+        right: 23%;
+        top: 15%;
+        text-shadow: 1px 1px 2px black, 0 0 1em red;
+        color: yellow;
+        font-size: 24px;
+        cursor: pointer;
+    }
+    .informInput{
+        width: 50%;
+        margin: 0 auto;
+        display: block;
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        color: black;
+        border: 1px solid black;
+        margin-top: 10px;
+
+    }
+    /*.readMail{*/
+        /*-webkit-animation: rotateReadMail 3s infinite;*/
+        /*-moz-animation:    rotateReadMail 3s infinite;*/
+        /*-o-animation:      rotateReadMail 3s infinite;*/
+        /*animation:         rotateReadMail 3s infinite;*/
+    /*}*/
+    /*@-webkit-keyframes rotateReadMail {*/
+        /*0%   { margin-left: -10%; }*/
+        /*25%   { margin-left: -8%; }*/
+        /*50%   { margin-left: -10%; }*/
+        /*75%   { margin-left: -12%; }*/
+        /*100%   { margin-left: -10%; }*/
+    /*}*/
+    /*@-moz-keyframes rotateReadMail {*/
+        /*0%   { margin-left: -10%; }*/
+        /*25%   { margin-left: -8%; }*/
+        /*50%   { margin-left: -10%; }*/
+        /*75%   { margin-left: -12%; }*/
+        /*100%   { margin-left: -10%; }*/
+    /*}*/
+    /*@-o-keyframes rotateReadMail {*/
+        /*0%   { margin-left: -10%; }*/
+        /*25%   { margin-left: -8%; }*/
+        /*50%   { margin-left: -10%; }*/
+        /*75%   { margin-left: -12%; }*/
+        /*100%   { margin-left: -10%; }*/
+    /*}*/
+    /*@keyframes rotateReadMail {*/
+        /*0%   { margin-left: -10%; }*/
+        /*25%   { margin-left: -8%; }*/
+        /*50%   { margin-left: -10%; }*/
+        /*75%   { margin-left: -12%; }*/
+        /*100%   { margin-left: -10%; }*/
+    /*}*/
+
+    .init-enter-active, .init-leave-active {
+        transition: all 3s
+    }
+    .init-enter, .init-leave-to {
+        left: -100%!important;
+    }
+    .person-enter-active, .person-leave-active {
+        transition: all 1.5s
+    }
+    .person-enter, .person-leave-to {
+        right: -100%!important;
+    }
+    .personSpeech-enter-active, .personSpeech-leave-active {
+        transition: all 3s
+    }
+    .personSpeech-enter, .personSpeech-leave-to {
+        right: -100%!important;
+    }
+    .inform-enter-active, .inform-leave-active {
+        transition: all 3s
+    }
+    .inform-enter, .inform-leave-to {
+        top: -100%!important;
+    }
+    .point-enter-active, .point-leave-active {
+        transition: all 1s
+    }
+    .point-enter, .point-leave-to {
+        opacity: 0!important;
+    }
+</style>
+</body>
+</html>
